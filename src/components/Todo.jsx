@@ -1,8 +1,53 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import todo_icon from '../assets/todo_icon.png'
 import TodoItems from './TodoItems'
 
 const Todo = () => {
+
+    const[todoList,setTodoList]=useState(localStorage.getItem("todos")?
+        JSON.parse(localStorage.getItem("todos")):[]);//getting item from local storage convert it from string to array and display it after refresh
+    
+    const inputRef=useRef()
+    const add=()=>{
+        const inputText=inputRef.current.value.trim();
+
+        if(inputText===""){
+            return null;
+        }
+
+        const newTodo={
+            id:Date.now(),
+            text:inputText,
+            iscomplete:false,
+        }
+        setTodoList((prev)=>[...prev,newTodo]);
+        inputRef.current.value="";//after adding the todo item in the list clear the input field
+    }
+
+    const deleteTodo=(id)=>{
+        setTodoList((prvTodos)=>{
+            return prvTodos.filter((todo)=>
+            todo.id!==id)
+        })
+
+    }
+
+    const toggle=(id)=>{
+        setTodoList((prevTodos)=>{
+            return prevTodos.map((todo)=>{
+                if(todo.id===id){
+                    return {...todo,iscomplete:!todo.iscomplete}//before this all the item is false when I click it changes means only property is being changed
+                }
+                return todo;
+            })
+        })
+    }
+
+        useEffect(()=>{
+            localStorage.setItem("todos",JSON.stringify(todoList))
+        },[todoList])//store the items in local storage and convert it into string from array
+
+
   return (
     <div className='bg-white place-self-center w-11/12 max-w-md
     flex flex-col p-7 min-h-137.5 rounded-xl'>
@@ -17,17 +62,25 @@ const Todo = () => {
 
         <div className='flex items-center my-7 bg-gray-200
         rounded-full'>
-            <input className='bg-transparent border-0 outline-0 flex-1 h-14
+            <input ref={inputRef} className='bg-transparent border-0 outline-0 flex-1 h-14
             pl-6 pr-2 placeholder:text-slate-600' 
             type='text' placeholder='Add your Task'/>
-            <button className='border-none rounded-full
+            <button onClick={add} className='border-none rounded-full
             bg-orange-600 w-32 h-14 text-white text-lg font-medium
             cursor-pointer'>ADD+</button>
         </div>
 
         <div>
-            <TodoItems text="Learn coding"/>
-            <TodoItems text="Learn Great"/>
+
+            {todoList.map((item,index)=>{
+                return <TodoItems key={index}
+                text={item.text}
+                id={item.id}
+                iscomplete={item.iscomplete}
+                deleteTodo={deleteTodo}
+                toggle={toggle}/>
+            })}
+            
 
         </div>
 
