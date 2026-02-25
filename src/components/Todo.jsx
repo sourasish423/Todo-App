@@ -49,25 +49,22 @@ const Todo = () => {
 
 
   return (
-    <div className='bg-white place-self-center w-11/12 max-w-md
-    flex flex-col p-7 min-h-137.5 rounded-xl'>
+    <div className="bg-white w-full max-w-lg min-h-[400px]: rounded-xl p-6 sm:p-8 shadow-xl
+    flex flex-col">
 
              {/* Title */}
-        <div className='flex items-center mt-7 gap-2'>
+        <div className='flex items-center gap-2 mb-6'>
             <img className='w-8' src={todo_icon} alt=""/>
                 <h1 className='text-3xl font-semibold'>To-Do List</h1>
         </div>
 
              {/* Input Box */}
 
-        <div className='flex items-center my-7 bg-gray-200
-        rounded-full'>
-            <input ref={inputRef} className='bg-transparent border-0 outline-0 flex-1 h-14
-            pl-6 pr-2 placeholder:text-slate-600' 
+        <div className='flex flex-col sm:flex-row gap-3'>
+            <input ref={inputRef} className="flex-1 px-4 py-3 rounded-full bg-gray-200 outline-none"  
             type='text' placeholder='Add your Task'/>
-            <button onClick={add} className='border-none rounded-full
-            bg-orange-600 w-32 h-14 text-white text-lg font-medium
-            cursor-pointer'>ADD+</button>
+            <button onClick={add} className="px-6 py-3 
+            rounded-full bg-orange-600 text-white">ADD+</button>
         </div>
 
         <div>
