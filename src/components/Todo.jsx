@@ -4,49 +4,53 @@ import TodoItems from './TodoItems'
 
 const Todo = () => {
 
-    const[todoList,setTodoList]=useState(localStorage.getItem("todos")?
-        JSON.parse(localStorage.getItem("todos")):[]);//getting item from local storage convert it from string to array and display it after refresh
+    const [todoList, setTodoList] = useState([]);//getting item from backend and storing in the state
     
     const inputRef=useRef()
-    const add=()=>{
-        const inputText=inputRef.current.value.trim();
+    const add = () => {
+  const inputText = inputRef.current.value.trim();
 
-        if(inputText===""){
-            return null;
-        }
+  if (inputText === "") return;
 
-        const newTodo={
-            id:Date.now(),
-            text:inputText,
-            iscomplete:false,
-        }
-        setTodoList((prev)=>[...prev,newTodo]);
-        inputRef.current.value="";//after adding the todo item in the list clear the input field
-    }
+  fetch("http://localhost:5000/tasks", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ text: inputText })
+  })
+    .then(res => res.json())    
+    .then(() => {
+      fetchTasks(); // reload from backend
+      inputRef.current.value = "";//clear input field after adding a task
+    });
+};
 
-    const deleteTodo=(id)=>{
-        setTodoList((prvTodos)=>{
-            return prvTodos.filter((todo)=>
-            todo.id!==id)
-        })
+    const deleteTodo = (id) => {
+  fetch(`http://localhost:5000/tasks/${id}`, {
+    method: "DELETE"
+  })
+    .then(res => res.json())
+    .then(() => fetchTasks());
+};
 
-    }
+   const toggle = (id) => {
+  fetch(`http://localhost:5000/tasks/${idnp}`, {
+    method: "PUT"
+  })
+    .then(res => res.json())
+    .then(() => fetchTasks());
+};
 
-    const toggle=(id)=>{
-        setTodoList((prevTodos)=>{
-            return prevTodos.map((todo)=>{
-                if(todo.id===id){
-                    return {...todo,iscomplete:!todo.iscomplete}//before this all the item is false when I click it changes means only property is being changed
-                }
-                return todo;
-            })
-        })
-    }
+        const fetchTasks = () => {
+  fetch("http://localhost:5000/tasks")
+    .then(res => res.json())
+    .then(data => setTodoList(data));
+};
 
-        useEffect(()=>{
-            localStorage.setItem("todos",JSON.stringify(todoList))
-        },[todoList])//store the items in local storage and convert it into string from array
-
+useEffect(() => {
+  fetchTasks();
+}, []);
 
   return (
     <div className="bg-white w-full max-w-lg min-h-[400px]: rounded-xl p-6 sm:p-8 shadow-xl
@@ -69,14 +73,18 @@ const Todo = () => {
 
         <div>
 
-            {todoList.map((item,index)=>{
-                return <TodoItems key={index}
-                text={item.text}
-                id={item.id}
-                iscomplete={item.iscomplete}
-                deleteTodo={deleteTodo}
-                toggle={toggle}/>
-            })}
+          {todoList.map((item) => {
+          return (
+            <TodoItems
+              key={item._id}
+              text={item.text}
+              id={item._id}
+              iscomplete={item.iscomplete}
+              deleteTodo={deleteTodo}
+              toggle={toggle}
+            />
+          )
+        })}
             
 
         </div>
