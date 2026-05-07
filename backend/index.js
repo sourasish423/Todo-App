@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const Task = require("./models/task");
+const User = require("./models/user");
+const bcrypt = require("bcrypt");
 
 const app = express();
 app.use(cors());//allow cross-origin requests no cors-error
@@ -12,6 +14,29 @@ mongoose.connect("mongodb+srv://todouser123:testuser123@cluster0.ixss3bc.mongodb
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 
+//for user signup
+  app.post("/signup", async (req, res) => {
+    const { name, email, password } = req.body;//taking the user input from the request body
+
+    const existingUser = await User.findOne({ email });//checking if the user already exists in the database
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);//hashing the password for security
+
+      // create user
+  const user = await User.create({//sendind the user data to the database to create a new user
+    name,
+    email,
+    password: hashedPassword
+  });
+
+  res.json({
+    message: "Signup successful"
+  });
+
+});
 
 
 //get all tasks
