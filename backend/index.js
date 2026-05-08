@@ -3,12 +3,14 @@ const cors = require('cors');
 const Task = require("./models/task");
 const User = require("./models/user");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 app.use(cors());//allow cross-origin requests no cors-error
 app.use(express.json());
 
 const mongoose = require("mongoose");
+const user = require('./models/user');
 
 mongoose.connect("mongodb+srv://todouser123:testuser123@cluster0.ixss3bc.mongodb.net/?appName=Cluster0")
   .then(() => console.log("MongoDB Connected"))
@@ -37,6 +39,42 @@ mongoose.connect("mongodb+srv://todouser123:testuser123@cluster0.ixss3bc.mongodb
   });
 
 });
+
+
+
+
+
+//for user login
+app.post("/login", async (req, res) => {//front end sends a post request to backend for comaprison of details
+  const { email, password } = req.body;
+
+  const user=await user.findOne({email});//checking if the user exists in the database
+  if (!user) {
+    return res.status(400).json({ message: "Invalid credentials" });
+  }
+
+  const isMatch = await bcrypt.compare(
+    password, 
+    user.password);//comparing the password entered by the user with the hashed password stored in the database
+
+if(!isMatch){//if the password does not match
+  return res.status(400).json({ message: "Invalid credentials" });
+}
+ // create token
+  const token = jwt.sign(
+    { id: user._id },
+    "secretkey"
+  );
+
+  res.json({
+    message: "Login successful",
+    token
+  });
+} );//sending a response back to the frontend with a success message and a token if the login is successful. If the credentials are invalid, it sends an error message.
+
+
+
+
 
 
 //get all tasks
