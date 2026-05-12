@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const styles = {
   body: {
     background: "#f5a623",
@@ -95,11 +95,12 @@ const CalendarIcon = () => (
   </svg>
 );
 
-export default function Login({ onSwitchToSignup }) {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [focusedField, setFocusedField] = useState(null);
+  const navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
@@ -109,17 +110,40 @@ export default function Login({ onSwitchToSignup }) {
     return newErrors;
   };
 
-  const handleLogin = () => {
-    const newErrors = validate();
+  const handleLogin = async() => {
+    const newErrors = validate();//checks email,password empty
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      return;
+      return;//if there are errors, set the errors state and return early to prevent further processing
     }
     setErrors({});
-    alert(`Logged in as ${email}!`);
-  };
 
+    try {
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });//sends a POST request to the backend with the email and password entered by the user in the login form. 
+      // The backend will then validate the credentials and respond accordingly.
+      
+      const data = await response.json();//parses the JSON response from the backend
+      alert(data.message);//displays an alert with the message received from the backend, which indicates whether the login was successful or if there were any issues with the credentials.
+      localStorage.setItem("token", data.token);//stores the token received from the backend in the browser's local storage. 
+      navigate("/tasks")}//navigates the user to the home page ("/tasks") after a successful login.
+      
+      
+      catch (err) {
+    console.log(err);
+    alert("Login failed");
+
+  }
+}
+
+
+      
   return (
+    
     <div style={styles.body}>
       <div style={styles.card}>
         <div style={styles.cardTitle}>
@@ -168,7 +192,7 @@ export default function Login({ onSwitchToSignup }) {
 
         <div style={styles.footer}>
           Don't have an account?{" "}
-          <button style={styles.link} onClick={onSwitchToSignup}>
+          <button style={styles.link} onClick={() => navigate("/")}>
             Sign Up
           </button>
         </div>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const styles = {
   body: {
@@ -111,6 +112,7 @@ export default function Signup({ onSwitchToLogin }) {
     else if (form.password.length < 6) newErrors.password = "Minimum 6 characters.";
     return newErrors;
   };
+  const navigate = useNavigate();
 
   const handleSignup = async() => {
     const newErrors = validate();//it checks any empty fields or invalid email format and returns an object with error messages for each field if there are any validation issues. If there are no errors, it returns an empty object.
@@ -139,7 +141,7 @@ export default function Signup({ onSwitchToLogin }) {
     alert(data.message);
 
     if (res.ok) {
-      onSwitchToLogin();
+      navigate("/login");
     }
   }//if the response is successful, it shows a success message and switches to the login page. If there is an error during the fetch request, it catches the error and shows an alert with "Signup failed".
 
@@ -148,7 +150,10 @@ export default function Signup({ onSwitchToLogin }) {
     alert("Signup failed");
   }
   }//otherwise failed signup
-
+ const inputStyle = (id) => ({
+    ...styles.input,
+    ...(focusedField === id ? styles.inputFocus : {}),
+  });
   
 
   return (
@@ -190,7 +195,7 @@ export default function Signup({ onSwitchToLogin }) {
 
         <div style={styles.footer}>
           Already have an account?{" "}
-          <button style={styles.link} onClick={onSwitchToLogin}>
+          <button style={styles.link} onClick={() => navigate("/login")}>
             Login
           </button>
         </div>

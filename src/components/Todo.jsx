@@ -15,7 +15,8 @@ const Todo = () => {
   fetch("http://localhost:5000/tasks", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token")
     },
     body: JSON.stringify({ text: inputText })
   })
@@ -28,22 +29,32 @@ const Todo = () => {
 
     const deleteTodo = (id) => {
   fetch(`http://localhost:5000/tasks/${id}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: {
+      Authorization: localStorage.getItem("token")
+    }
   })
     .then(res => res.json())
     .then(() => fetchTasks());
 };
 
    const toggle = (id) => {
-  fetch(`http://localhost:5000/tasks/${idnp}`, {
-    method: "PUT"
+  fetch(`http://localhost:5000/tasks/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: localStorage.getItem("token")
+    }
   })
     .then(res => res.json())
     .then(() => fetchTasks());
 };
 
         const fetchTasks = () => {
-  fetch("http://localhost:5000/tasks")
+  fetch("http://localhost:5000/tasks", {
+    headers: {
+      Authorization: localStorage.getItem("token")
+    }
+  })
     .then(res => res.json())
     .then(data => setTodoList(data));
 };
