@@ -1,3 +1,5 @@
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
@@ -11,7 +13,7 @@ const app = express();
 app.use(cors());//allow cross-origin requests no cors-error
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://todouser123:testuser123@cluster0.ixss3bc.mongodb.net/?appName=Cluster0")
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 
@@ -56,7 +58,7 @@ app.post("/login", async (req, res) => {//front end sends a post request to back
   // create token
   const token = jwt.sign(
     { id: foundUser._id },//this id is created by mongodb for each user
-    "secretkey"
+    process.env.JWT_SECRET
   );
 
   res.json({
