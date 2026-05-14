@@ -112,7 +112,7 @@ app.delete("/tasks/:id", auth, async (req, res) => {
   await Task.findByIdAndDelete(req.params.id);
   res.json({ message: "Deleted" });
 });
-
-app.listen(5000, () => {
-  console.log("Server running");
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
