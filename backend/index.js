@@ -16,7 +16,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://your-vercel-url.vercel.app"
+    "https://todo-app-si-mauve.vercel.app"
   ],
   credentials: true
 }));
