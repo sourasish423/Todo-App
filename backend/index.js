@@ -14,10 +14,7 @@ const auth = require("./middleware/auth");
 const app = express();
 
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://todo-app-psi-mauve.vercel.app"
-  ],
+  origin: true,
   credentials: true
 }));
 
