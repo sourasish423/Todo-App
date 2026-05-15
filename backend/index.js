@@ -1,25 +1,28 @@
 const dotenv = require("dotenv");
 dotenv.config();
-const express = require('express');
-const cors = require('cors');
+
+const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
-const Task = require("./models/task");
-const User = require("./models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const Task = require("./models/task");
+const User = require("./models/user");
 const auth = require("./middleware/auth");
 
-const cors = require("cors");
+const app = express();
 
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://todo-app-frontend.vercel.app"
+    "https://your-vercel-url.vercel.app"
   ],
   credentials: true
-}));//allow cross-origin requests no cors-error
+}));
 
 app.options("*", cors());
+
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
