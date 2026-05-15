@@ -10,7 +10,13 @@ const jwt = require("jsonwebtoken");
 const auth = require("./middleware/auth");
 
 const app = express();
-app.use(cors());//allow cross-origin requests no cors-error
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));//allow cross-origin requests no cors-error
+
+app.options("*", cors());
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
