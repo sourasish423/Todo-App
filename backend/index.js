@@ -9,11 +9,14 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const auth = require("./middleware/auth");
 
-const app = express();
+const cors = require("cors");
+
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  origin: [
+    "http://localhost:5173",
+    "https://todo-app-frontend.vercel.app"
+  ],
+  credentials: true
 }));//allow cross-origin requests no cors-error
 
 app.options("*", cors());
