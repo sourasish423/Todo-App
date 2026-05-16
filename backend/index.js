@@ -14,9 +14,12 @@ const auth = require("./middleware/auth");
 const app = express();
 
 app.use(cors({
-  origin: true,
+  origin: "https://todo-app-psi-mauve.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+
+app.options("*", cors());
 
 app.use(express.json());
 
