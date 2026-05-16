@@ -124,7 +124,7 @@ export default function Signup({ onSwitchToLogin }) {
    
     try {
 
-    const res = await fetch("https://todo-app-production-5682.up.railway.app/signup", {
+    const res = await fetch("https://todo-app-production-8834.up.railway.app/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
