@@ -12,6 +12,9 @@ const User = require("./models/user");
 const auth = require("./middleware/auth");
 
 const app = express();
+app.get("/", (req, res) => {
+  res.send("Backend Running");
+});
 
 app.use(cors());
 
