@@ -129,9 +129,9 @@ export default function Login() {
       
       const data = await response.json();//parses the JSON response from the backend
       alert(data.message);//displays an alert with the message received from the backend, which indicates whether the login was successful or if there were any issues with the credentials.
-      localStorage.setItem("token", data.token);//stores the token received from the backend in the browser's local storage. 
+      if(response.ok){localStorage.setItem("token", data.token);//stores the token received from the backend in the browser's local storage. 
       navigate("/tasks")}//navigates the user to the home page ("/tasks") after a successful login.
-      
+    }
       
       catch (err) {
     console.log(err);
