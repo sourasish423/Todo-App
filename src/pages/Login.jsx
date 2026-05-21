@@ -120,7 +120,7 @@ export default function Login() {
     setErrors({});
 
     try {
-      const response = await fetch("https://todo-app-production-fb20.up.railway.app/login", {
+      const response = await fetch("https://todo-app-production-a24a.up.railway.app/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

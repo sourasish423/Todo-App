@@ -14,7 +14,7 @@ const Todo = () => {
 
   if (inputText === "") return;
 
-  fetch("https://todo-app-production-fb20.up.railway.app/tasks", {
+  fetch("https://todo-app-production-a24a.up.railway.app/tasks", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -30,7 +30,7 @@ const Todo = () => {
 };
 
     const deleteTodo = (id) => {
-  fetch(`https://todo-app-production-fb20.up.railway.app/tasks/${id}`, {
+  fetch(`https://todo-app-production-a24a.up.railway.app/tasks/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: localStorage.getItem("token")
@@ -41,7 +41,7 @@ const Todo = () => {
 };
 
    const toggle = (id) => {
-  fetch(`https://todo-app-production-fb20.up.railway.app/tasks/${id}`, {
+  fetch(`https://todo-app-production-a24a.up.railway.app/tasks/${id}`, {
     method: "PUT",
     headers: {
       Authorization: localStorage.getItem("token")
@@ -52,7 +52,7 @@ const Todo = () => {
 };
 
         const fetchTasks = () => {
-  fetch("https://todo-app-production-fb20.up.railway.app/tasks", {
+  fetch("https://todo-app-production-a24a.up.railway.app/tasks", {
     headers: {
       Authorization: localStorage.getItem("token")
     }
